@@ -1,0 +1,46 @@
+- hosts: all
+  become: yes
+  vars:
+    oracle_java_version: 8
+    oracle_java_home: "/usr/java/latest"
+    oracle_java_download_timeout: 30
+
+  pre_tasks:
+    - add_host:
+        name: "{{ inventory_hostname }}"
+        groups: dev
+      changed_when: False
+
+    - name: install PostgreSQL 9.6 repository
+      yum:
+        name: https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
+        state: present
+      become: yes
+
+  tasks:
+    - name: upgrade all packages
+      yum:
+        name: '*'
+        state: latest
+      become: yes
+
+  roles:
+    - role: geerlingguy.postgresql
+      postgresql_enablerepo: "pgdg96"
+      postgresql_version: 9.6
+      postgresql_data_dir: /var/lib/pgsql/9.6/data
+      postgresql_bin_path: /usr/pgsql-9.6/bin
+      postgresql_config_path: /var/lib/pgsql/9.6/data
+      postgresql_daemon: postgresql-9.6.service
+      postgresql_packages:
+        - postgresql96
+        - postgresql96-server
+        - postgresql96-libs
+        - postgresql96-contrib
+        - postgresql96-devel
+      become: yes
+    - role: jdauphant.nginx
+    - role: geerlingguy.firewall
+    - role: fishman.oracle_java
+    - role: alvistack.jira
+    - role: alvistack.confluence

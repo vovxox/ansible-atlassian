@@ -1,0 +1,12 @@
+- hosts: jira
+  gather_facts: true
+
+  environment: "{{proxy_env}}"
+
+  roles:
+    - role: fishman.oracle_java
+      become: yes
+      tags: java
+    - role: alvistack.jira
+      become: yes
+      tags: jira

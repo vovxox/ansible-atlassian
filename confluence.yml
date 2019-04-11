@@ -1,0 +1,12 @@
+- hosts: confluence
+  gather_facts: true
+
+  environment: "{{proxy_env}}"
+
+  roles:
+    - role: fishman.oracle_java
+      become: yes
+      tags: java
+    - role: alvistack.confluence
+      become: yes
+      tags: confluence

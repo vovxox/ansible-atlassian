@@ -1,0 +1,16 @@
+- import_playbook: database.yml
+- import_playbook: www.yml
+- import_playbook: confluence.yml
+- import_playbook: jira.yml
+- hosts: all
+  become: yes
+  pre_tasks:
+    - name: upgrade all packages
+      yum:
+        name: '*'
+        state: latest
+      become: yes
+  roles:
+    - role: fishman.sesam_backup
+      become: yes
+

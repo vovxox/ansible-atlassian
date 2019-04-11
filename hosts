@@ -1,0 +1,35 @@
+[proxy:children]
+business_workflow
+
+[business_workflow:children]
+database
+www
+confluence
+jira
+environments
+
+[database]
+confluence_test.dmz
+
+[www]
+confluence_test.dmz
+
+[confluence]
+confluence_test.dmz
+
+[jira]
+confluence_test.dmz
+
+[environments:children]
+dev
+stage
+prod
+
+[dev]
+confluence_test.dmz
+
+[stage]
+# empty
+
+[prod]
+# empty
